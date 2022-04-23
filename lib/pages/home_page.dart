@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
   List personals = [];
 
   @override
@@ -20,24 +19,28 @@ class _HomePageState extends State<HomePage> {
     getPerson();
   }
 
-  void getPerson() async{
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection('Personal');
+  void getPerson() async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('Personal');
 
     QuerySnapshot personal = await collectionReference.get();
 
     if (personal.docs.isNotEmpty) {
       for (var doc in personal.docs) {
         personals.add(doc.data());
+        if (mounted) {
+          setState(() {});
+        }
       }
     }
   }
 
-  void putPerson(data) async{
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection('Personal');
+  void putPerson(data) async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('Personal');
 
     await collectionReference.add(data);
     setState(() {});
-
   }
 
   @override
@@ -45,55 +48,62 @@ class _HomePageState extends State<HomePage> {
     getPerson();
     return Scaffold(
       floatingActionButton: GFButton(
-        onPressed: (){
-          showDialog(context: context, builder: (_) => CustomEventDialog());
+        onPressed: () {
+          showDialog(
+              context: context, builder: (_) => const CustomEventDialog());
         },
         text: "Agregar Personal",
-        icon: Icon(Icons.edit, color: Colors.white,),
+        icon: const Icon(
+          Icons.edit,
+          color: Colors.white,
+        ),
         shape: GFButtonShape.pills,
         size: 50,
-        textStyle: TextStyle(fontSize: 15),
+        textStyle: const TextStyle(fontSize: 15),
         color: Colors.red,
       ),
       appBar: AppBar(
-        title: Text('Personal'),
+        title: const Text('Personal'),
         centerTitle: true,
         backgroundColor: Colors.red,
-        leading: Icon(Icons.arrow_back_ios_new),
+        leading: const Icon(Icons.arrow_back_ios_new),
       ),
       body: Stack(
-        children: [
-          fondoApp(),
-          _itemsApp(personals)
-        ],
+        children: [fondoApp(), _itemsApp(personals)],
       ),
     );
   }
 
-  Widget _itemsApp(List personals){
+  Widget _itemsApp(List personals) {
     return ListView.builder(
-      itemCount: personals.length,
-      itemBuilder: (context, i) => _crearItem(personals[i])
-    );
+        itemCount: personals.length,
+        itemBuilder: (context, i) => _crearItem(personals[i]));
   }
 
-  Widget _crearItem(personal){
+  Widget _crearItem(personal) {
     return Card(
       child: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             Row(
               children: [
-                Icon(Icons.person),
-                SizedBox(width: 10,),
-                Text('${personal['name']} ${personal['lastname']}', style: TextStyle(fontSize: 20),)
+                const Icon(Icons.person),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  '${personal['name']} ${personal['lastname']}',
+                  style: const TextStyle(fontSize: 20),
+                )
               ],
             ),
             Row(
               children: [
-                Icon(Icons.document_scanner_rounded),
-                SizedBox(width: 10,),
+                const Icon(Icons.document_scanner_rounded),
+                const SizedBox(
+                  width: 10,
+                ),
                 Text('${personal['document']}')
               ],
             )
@@ -112,7 +122,6 @@ class CustomEventDialog extends StatefulWidget {
 }
 
 class CustomEventDialogState extends State<CustomEventDialog> {
-
   Map<String, dynamic> userEnv = {};
 
   @override
@@ -127,7 +136,7 @@ class CustomEventDialogState extends State<CustomEventDialog> {
             child: titleEdicion(context),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -165,11 +174,11 @@ class CustomEventDialogState extends State<CustomEventDialog> {
       },
       readOnly: read,
       controller: TextEditingController()..text = text,
-      style: TextStyle(fontSize: 18),
+      style: const TextStyle(fontSize: 18),
       decoration: InputDecoration(
           labelText: label,
           hintText: label,
-          hintStyle: TextStyle(color: Colors.grey)),
+          hintStyle: const TextStyle(color: Colors.grey)),
     );
   }
 
@@ -208,11 +217,13 @@ class CustomEventDialogState extends State<CustomEventDialog> {
     );
   }
 
-  void putPerson(data) async{
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection('Personal');
+  void putPerson(data) async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('Personal');
 
     await collectionReference.add(data);
-
+    if (mounted) {
+      setState(() {});
+    }
   }
 }
-

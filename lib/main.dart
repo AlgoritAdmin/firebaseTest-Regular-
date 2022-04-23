@@ -7,7 +7,6 @@ void main() {
   Firebase.initializeApp().then((value) {
     runApp(MyApp());
   });
-  
 }
 
 class MyApp extends StatelessWidget {
@@ -17,9 +16,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Material App',
       initialRoute: 'home',
-      routes: {
-        'home':(context) => HomePage()
-      },
+      routes: {'home': (context) => const HomePage()},
     );
   }
 }
